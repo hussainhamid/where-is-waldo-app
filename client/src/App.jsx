@@ -1,35 +1,67 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { createContext, useState } from "react";
+import "./App.css";
+import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
+import SignUp from "./pages/signUp.jsx";
+import LoginFunc from "./pages/logIn.jsx";
+import Homepage from "./pages/homePage.jsx";
+import AdminPage from "./pages/adminPage.jsx";
 
-function App() {
-  const [count, setCount] = useState(0)
+export const shopContext = createContext({
+  user: "",
+  addUser: () => {},
+  token: "",
+  addToken: () => {},
+  admin: false,
+  addAdmin: () => {},
+});
 
+function Layout() {
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <main>
+      <Outlet />
+    </main>
+  );
 }
 
-export default App
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Layout />,
+    children: [
+      { path: "/", element: <LoginFunc /> },
+      { path: "/sign-up", element: <SignUp /> },
+      { path: "/homepage", element: <Homepage /> },
+      { path: "/admin", element: <AdminPage /> },
+    ],
+  },
+]);
+
+function App() {
+  const [user, setUser] = useState("");
+  const [token, setToken] = useState(
+    () => localStorage.getItem("jwtToken") || ""
+  );
+  const [admin, setAdmin] = useState(false);
+
+  const addUser = (username) => {
+    setUser(username);
+  };
+
+  const addToken = (bearerToken) => {
+    setToken(bearerToken);
+  };
+
+  const addAdmin = (isAdmin) => {
+    setAdmin(isAdmin);
+  };
+
+  return (
+    <shopContext.Provider
+      value={{ user, addUser, token, addToken, admin, addAdmin }}
+    >
+      <RouterProvider router={router} />
+    </shopContext.Provider>
+  );
+}
+
+export default App;
