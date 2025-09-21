@@ -5,6 +5,7 @@ import SignUp from "./pages/signUp.jsx";
 import LoginFunc from "./pages/logIn.jsx";
 import Homepage from "./pages/homePage.jsx";
 import AdminPage from "./pages/adminPage.jsx";
+import UploadImage from "./pages/uploadImage.jsx";
 
 export const shopContext = createContext({
   user: "",
@@ -32,6 +33,7 @@ const router = createBrowserRouter([
       { path: "/sign-up", element: <SignUp /> },
       { path: "/homepage", element: <Homepage /> },
       { path: "/admin", element: <AdminPage /> },
+      { path: "/uploads", element: <UploadImage /> },
     ],
   },
 ]);

@@ -10,6 +10,9 @@ require("./config/passport");
 
 const { signUpPostRouter } = require("./router/signUpRouter");
 const { logInPostRouter } = require("./router/logInRouter");
+const {
+  uploadPictureToCloudRouter,
+} = require("./router/uploadPictureToCloudRouter");
 const passport = require("passport");
 
 app.use(express.json());
@@ -28,6 +31,7 @@ app.get("/", (req, res) => {
 
 app.use("/sign-up", signUpPostRouter);
 app.use("/log-in", logInPostRouter);
+app.use("/upload", uploadPictureToCloudRouter);
 
 app.get("/me", passport.authenticate("jwt", { session: false }), (req, res) => {
   res.json({ success: true, user: req.user });

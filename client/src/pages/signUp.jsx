@@ -22,10 +22,12 @@ export default function SignUp() {
             Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
           },
         });
-        if (res.data.success) {
+        if (res.data.success && res.data.user.status == "ADMIN") {
           addUser(res.data.user.username);
-          addAdmin(res.data.user.admin);
-          navigate("/homePage");
+          addAdmin(true);
+        } else if (res.data.user.status == "USER") {
+          addUser(res.data.user.username);
+          addAdmin(false);
         }
       }
     };

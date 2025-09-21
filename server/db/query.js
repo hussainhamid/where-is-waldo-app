@@ -18,7 +18,16 @@ async function getUser(username) {
   });
 }
 
+async function uploadImage(imageUrl) {
+  await prisma.image.create({
+    data: {
+      imageUrl,
+    },
+  });
+}
+
 module.exports = {
   signUpUser,
   getUser,
+  uploadImage,
 };

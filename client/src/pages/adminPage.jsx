@@ -1,3 +1,11 @@
+import { useNavigate } from "react-router-dom";
+
 export default function AdminPage() {
-  return <h1>Admin Page - Under Construction</h1>;
+  const navigate = useNavigate();
+
+  return (
+    <h1>
+      <button onClick={() => navigate("/uploads")}>Upload Image</button>
+    </h1>
+  );
 }
