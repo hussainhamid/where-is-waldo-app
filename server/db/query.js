@@ -26,8 +26,22 @@ async function uploadImage(imageUrl) {
   });
 }
 
+async function getAllImages() {
+  return await prisma.image.findMany({});
+}
+
+async function deleteImageFromDb(imageUrl) {
+  return await prisma.image.deleteMany({
+    where: {
+      imageUrl,
+    },
+  });
+}
+
 module.exports = {
   signUpUser,
   getUser,
+  getAllImages,
+  deleteImageFromDb,
   uploadImage,
 };
