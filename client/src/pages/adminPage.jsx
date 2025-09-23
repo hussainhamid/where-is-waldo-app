@@ -90,7 +90,13 @@ export default function AdminPage() {
                 }}
               />
               <button onClick={() => deleteImage(imgUrl)}>Delete</button>
-              <button>set coords</button>
+              <button
+                onClick={() =>
+                  navigate(`/set-coords/${encodeURIComponent(imgUrl)}`)
+                }
+              >
+                set coords
+              </button>
             </div>
           ))
         ) : (

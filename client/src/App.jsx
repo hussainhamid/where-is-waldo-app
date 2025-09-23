@@ -6,6 +6,7 @@ import LoginFunc from "./pages/logIn.jsx";
 import Homepage from "./pages/homePage.jsx";
 import AdminPage from "./pages/adminPage.jsx";
 import UploadImage from "./pages/uploadImage.jsx";
+import SetCoord from "./pages/set-Coords.jsx";
 
 export const shopContext = createContext({
   user: "",
@@ -34,6 +35,7 @@ const router = createBrowserRouter([
       { path: "/homepage", element: <Homepage /> },
       { path: "/admin", element: <AdminPage /> },
       { path: "/uploads", element: <UploadImage /> },
+      { path: "/set-coords/:imgUrl", element: <SetCoord /> },
     ],
   },
 ]);
