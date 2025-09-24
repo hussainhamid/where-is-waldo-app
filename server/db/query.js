@@ -38,10 +38,33 @@ async function deleteImageFromDb(imageUrl) {
   });
 }
 
+async function setCoords(imageUrl, x, y, charName) {
+  console.log("db: ", x, y, charName);
+  const img = await prisma.image.findFirst({
+    where: {
+      imageUrl,
+    },
+  });
+
+  if (!img) {
+    throw new Error("image not found");
+  }
+
+  await prisma.characters.create({
+    data: {
+      imageId: img.id,
+      x: Number(x),
+      y: Number(y),
+      name: charName,
+    },
+  });
+}
+
 module.exports = {
   signUpUser,
   getUser,
   getAllImages,
   deleteImageFromDb,
   uploadImage,
+  setCoords,
 };
