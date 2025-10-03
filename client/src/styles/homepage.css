@@ -1,0 +1,11 @@
+.navBar {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid gray;
+  padding-bottom: 20px;
+}
+
+.imgDiv {
+  margin-top: 20px;
+}

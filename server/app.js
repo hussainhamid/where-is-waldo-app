@@ -39,6 +39,7 @@ app.use("/upload", uploadPictureToCloudRouter);
 app.use("/admin", getAllImagesRouter);
 app.use("/delete-image", deleteImageRouter);
 app.use("/set-coords", setCoordsRouter);
+app.use("/get-image", getAllImagesRouter);
 
 app.get("/me", passport.authenticate("jwt", { session: false }), (req, res) => {
   res.json({ success: true, user: req.user });

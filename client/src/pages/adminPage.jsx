@@ -74,6 +74,7 @@ export default function AdminPage() {
   return (
     <>
       <button onClick={() => navigate("/uploads")}>Upload Image</button>
+      <button onClick={() => navigate("/")}>Go back</button>
 
       <div>
         <h3>Uploaded Images</h3>

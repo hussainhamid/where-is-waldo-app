@@ -27,7 +27,17 @@ async function uploadImage(imageUrl) {
 }
 
 async function getAllImages() {
-  return await prisma.image.findMany({});
+  return await prisma.image.findMany({
+    include: {
+      characters: {
+        select: {
+          name: true,
+          x: true,
+          y: true,
+        },
+      },
+    },
+  });
 }
 
 async function deleteImageFromDb(imageUrl) {
