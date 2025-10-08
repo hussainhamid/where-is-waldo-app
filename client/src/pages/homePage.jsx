@@ -6,11 +6,14 @@ import "../styles/homepage.css";
 
 export default function Homepage() {
   const { token, addToken, addUser, addAdmin, admin } = useContext(shopContext);
-  const [coords, setCoords] = useState({ x: null, y: null });
-  const [charCoords, setCharCoords] = useState([{ name: "", x: "", y: "" }]);
+  const [coords, setCoords] = useState();
+  const [charCoords, setCharCoords] = useState([]);
   const [score, setScore] = useState(0);
   const [images, setImages] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const imgRef = useRef(null);
+
+  const userHighScore = localStorage.getItem("highScore") || 0;
 
   const navigate = useNavigate();
 
@@ -46,7 +49,8 @@ export default function Homepage() {
         if (res.data.success) {
           setImages(res.data.imageUrl);
           setCurrentIndex(0);
-         
+          const flatChars = res.data.imgData.flat();
+          setCharCoords(flatChars);
         }
       } catch (err) {
         console.error("error fetching image: ", err);
@@ -55,8 +59,6 @@ export default function Homepage() {
 
     fetchMe();
     fetchImage();
-
-    console.log(charCoords);
   }, [addUser, navigate, token]);
 
   const handleClick = async (e) => {
@@ -65,18 +67,21 @@ export default function Homepage() {
     const y = e.clientY - rect.top;
     const tolerance = 0.05;
 
-    const waldoX = 0.35;
-    const waldoY = 0.49;
-
     const relativeX = x / rect.width;
     const relativeY = y / rect.height;
     setCoords({ x: relativeX, y: relativeY });
 
-    if (
-      Math.abs(relativeX - waldoX) < tolerance &&
-      Math.abs(relativeY - waldoY) < tolerance
-    ) {
-      alert("You found Waldo!");
+    const found = charCoords.find(
+      (char) =>
+        Math.abs(relativeX - char.x) < tolerance &&
+        Math.abs(relativeY - char.y) < tolerance
+    );
+
+    if (found) {
+      alert(`You found ${found.name}!`);
+      setScore(score + 1);
+      localStorage.setItem("highScore", Math.max(score + 1, userHighScore));
+      setCurrentIndex((currentIndex + 1) % images.length);
     } else {
       alert("Try again!");
     }
@@ -98,6 +103,9 @@ export default function Homepage() {
         <div className="scoreDiv">
           <h3>score: {score}</h3>
         </div>
+        <div>
+          <h3>high score: {userHighScore}</h3>
+        </div>
 
         {admin ? (
           <button onClick={() => navigate("/admin")} className="btns">
@@ -113,6 +121,10 @@ export default function Homepage() {
         <img
           src={images[currentIndex]}
           alt={`Waldo ${currentIndex}`}
+          onClick={(e) => {
+            handleClick(e);
+          }}
+          ref={imgRef}
           style={{
             width: "80%",
             height: "auto",
@@ -120,14 +132,6 @@ export default function Homepage() {
             cursor: "crosshair",
           }}
         />
-
-        {charCoords.map((char, index) => (
-          <div key={index}>
-            <p>
-              {char.name}: ({char.x}, {char.y})
-            </p>
-          </div>
-        ))}
       </div>
     </>
   );

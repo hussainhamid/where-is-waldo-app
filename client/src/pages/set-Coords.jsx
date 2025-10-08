@@ -35,7 +35,7 @@ export default function SetCoord() {
 
     const storeImg = async () => {
       if (imgUrl) {
-        setImage(decodeURIComponent(imgUrl));
+        setImage(imgUrl);
       }
     };
     fetchMe();

@@ -49,7 +49,6 @@ async function deleteImageFromDb(imageUrl) {
 }
 
 async function setCoords(imageUrl, x, y, charName) {
-  console.log("db: ", x, y, charName);
   const img = await prisma.image.findFirst({
     where: {
       imageUrl,
