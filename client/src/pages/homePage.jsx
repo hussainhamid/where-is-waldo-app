@@ -6,7 +6,7 @@ import "../styles/homepage.css";
 
 export default function Homepage() {
   const { token, addToken, addUser, addAdmin, admin } = useContext(shopContext);
-  const [coords, setCoords] = useState();
+
   const [charCoords, setCharCoords] = useState([]);
   const [score, setScore] = useState(0);
   const [images, setImages] = useState([]);
@@ -69,7 +69,6 @@ export default function Homepage() {
 
     const relativeX = x / rect.width;
     const relativeY = y / rect.height;
-    setCoords({ x: relativeX, y: relativeY });
 
     const found = charCoords.find(
       (char) =>
@@ -82,6 +81,10 @@ export default function Homepage() {
       setScore(score + 1);
       localStorage.setItem("highScore", Math.max(score + 1, userHighScore));
       setCurrentIndex((currentIndex + 1) % images.length);
+
+      setCharCoords((prevCoords) =>
+        prevCoords.filter((char) => char.name !== found.name)
+      );
     } else {
       alert("Try again!");
     }
@@ -99,6 +102,9 @@ export default function Homepage() {
 
   return (
     <>
+      <div>
+        <p>you are playing as guest</p>
+      </div>
       <nav className="navBar">
         <div className="scoreDiv">
           <h3>score: {score}</h3>

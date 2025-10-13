@@ -54,12 +54,38 @@ export default function SignUp() {
         addAdmin(res.data.user.admin);
         addToken(res.data.token);
         setMessage(res.data.message);
+        navigate("/homepage");
       } else {
         setMessage(res.data.message);
       }
     } catch (err) {
       if (err) {
         console.log("error in signUp.jsx handleSubmit", err);
+      }
+    }
+  };
+
+  const handleGuest = async function (e) {
+    e.preventDefault();
+
+    try {
+      const res = await axios.post("http://localhost:3000/guest", {
+        withCredentials: true,
+      });
+
+      if (res.data.success) {
+        localStorage.setItem("jwtToken", res.data.token);
+        addUser(res.data.user.username);
+        addAdmin(res.data.user.admin);
+        addToken(res.data.token);
+        setMessage(res.data.message);
+        navigate("/homepage");
+      } else {
+        setMessage(res.data.message);
+      }
+    } catch (err) {
+      if (err) {
+        console.log("error in signUp.jsx handleGuest", err);
       }
     }
   };
@@ -96,6 +122,7 @@ export default function SignUp() {
           <div>
             <button onClick={handleSubmit}>Sign Up</button>
             <button onClick={() => navigate("/")}>Log In</button>
+            <button onClick={handleGuest}>Continue as Guest</button>
           </div>
         </form>
         <h2>{message}</h2>

@@ -13,7 +13,7 @@ model User {
     username String @unique
     password String
     score    Int    @default(0)
-    status   Role   @default(ADMIN)
+    status   Role   @default(USER)
 }
 
 model Image {

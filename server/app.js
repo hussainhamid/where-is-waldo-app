@@ -16,6 +16,7 @@ const {
 const { getAllImagesRouter } = require("./router/getAllImagesRouter");
 const { deleteImageRouter } = require("./router/deleteImageRouter");
 const { setCoordsRouter } = require("./router/setCoordsRouter");
+const { continueAsGuestRouter } = require("./router/continueAsGuestRouter");
 
 const passport = require("passport");
 
@@ -40,6 +41,7 @@ app.use("/admin", getAllImagesRouter);
 app.use("/delete-image", deleteImageRouter);
 app.use("/set-coords", setCoordsRouter);
 app.use("/get-image", getAllImagesRouter);
+app.use("/guest", continueAsGuestRouter);
 
 app.get("/me", passport.authenticate("jwt", { session: false }), (req, res) => {
   res.json({ success: true, user: req.user });
