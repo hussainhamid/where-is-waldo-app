@@ -13,13 +13,13 @@ model User {
     username String @unique
     password String
     score    Int    @default(0)
-    status   Role   @default(USER)
+    status   Role   @default(ADMIN)
 }
 
 model Image {
     imageId    Int          @default(autoincrement())
     id         String       @id @default(uuid())
-    imageUrl   String
+    imageUrl   String       @unique
     characters Characters[]
 }
 

@@ -41,11 +41,15 @@ async function getAllImages() {
 }
 
 async function deleteImageFromDb(imageUrl) {
-  return await prisma.image.deleteMany({
-    where: {
-      imageUrl,
-    },
-  });
+  const img = await prisma.image.findFirst({ where: { imageUrl } });
+
+  if (!img) {
+    return { count: 0 };
+  }
+
+  await prisma.characters.deleteMany({ where: { imageId: img.id } });
+
+  return await prisma.image.deleteMany({ where: { imageUrl } });
 }
 
 async function setCoords(imageUrl, x, y, charName) {

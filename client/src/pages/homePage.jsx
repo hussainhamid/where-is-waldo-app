@@ -5,9 +5,11 @@ import { useNavigate } from "react-router-dom";
 import "../styles/homepage.css";
 
 export default function Homepage() {
-  const { token, addToken, addUser, addAdmin, admin } = useContext(shopContext);
+  const { token, addToken, addUser, addAdmin, admin, user } =
+    useContext(shopContext);
 
   const [charCoords, setCharCoords] = useState([]);
+  const [charNames, setCharNames] = useState([]);
   const [score, setScore] = useState(0);
   const [images, setImages] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -49,8 +51,11 @@ export default function Homepage() {
         if (res.data.success) {
           setImages(res.data.imageUrl);
           setCurrentIndex(0);
-          const flatChars = res.data.imgData.flat();
+          const flatChars = res.data.imgData;
           setCharCoords(flatChars);
+          setCharNames(flatChars.map((char) => char.name));
+
+          console.log(res.data.imgData);
         }
       } catch (err) {
         console.error("error fetching image: ", err);
@@ -62,32 +67,44 @@ export default function Homepage() {
   }, [addUser, navigate, token]);
 
   const handleClick = async (e) => {
+    if (!imgRef.current) return;
+
     const rect = imgRef.current.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
+    const relativeX = (e.clientX - rect.left) / rect.width;
+    const relativeY = (e.clientY - rect.top) / rect.height;
     const tolerance = 0.05;
 
-    const relativeX = x / rect.width;
-    const relativeY = y / rect.height;
+    const currentChars = Array.isArray(charCoords[currentIndex])
+      ? charCoords[currentIndex]
+      : [];
 
-    const found = charCoords.find(
+    const found = currentChars.find(
       (char) =>
-        Math.abs(relativeX - char.x) < tolerance &&
-        Math.abs(relativeY - char.y) < tolerance
+        Math.abs(relativeX - Number(char.x)) < tolerance &&
+        Math.abs(relativeY - Number(char.y)) < tolerance
     );
 
-    if (found) {
-      alert(`You found ${found.name}!`);
-      setScore(score + 1);
-      localStorage.setItem("highScore", Math.max(score + 1, userHighScore));
-      setCurrentIndex((currentIndex + 1) % images.length);
-
-      setCharCoords((prevCoords) =>
-        prevCoords.filter((char) => char.name !== found.name)
-      );
-    } else {
+    if (!found) {
       alert("Try again!");
+      return;
     }
+
+    alert(`You found ${found.name}!`);
+    setScore((s) => s + 1);
+
+    setCharCoords((prev) => {
+      const copy = prev.map((arr) => (Array.isArray(arr) ? [...arr] : []));
+
+      copy[currentIndex] = copy[currentIndex].filter(
+        (c) => c.name !== found.name
+      );
+
+      if (copy[currentIndex].length === 0) {
+        setCurrentIndex((i) => (images.length ? (i + 1) % images.length : 0));
+      }
+
+      return copy;
+    });
   };
 
   const logOutFunc = async (e) => {
@@ -100,11 +117,19 @@ export default function Homepage() {
     navigate("/");
   };
 
+  const currentChars = Array.isArray(charCoords[currentIndex])
+    ? charCoords[currentIndex]
+    : [];
+
+  const nextTargetName = currentChars.length ? currentChars[0].name : "None";
+
   return (
     <>
-      <div>
-        <p>you are playing as guest</p>
-      </div>
+      {user === "guest" ? (
+        <div>
+          <p>you are playing as guest</p>
+        </div>
+      ) : null}
       <nav className="navBar">
         <div className="scoreDiv">
           <h3>score: {score}</h3>
@@ -124,6 +149,7 @@ export default function Homepage() {
       </nav>
 
       <div className="imgDiv">
+        <h2>find: {nextTargetName}</h2>
         <img
           src={images[currentIndex]}
           alt={`Waldo ${currentIndex}`}
