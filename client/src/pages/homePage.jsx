@@ -99,8 +99,31 @@ export default function Homepage() {
         (c) => c.name !== found.name
       );
 
-      if (copy[currentIndex].length === 0) {
-        setCurrentIndex((i) => (images.length ? (i + 1) % images.length : 0));
+      if (copy[currentIndex].length > 0) {
+        return copy;
+      }
+
+      const len = images.length;
+      let nextid = -1;
+
+      for (let k = 1; k <= len; k++) {
+        const cand = (currentIndex + k) % len;
+        if (Array.isArray(copy[cand]) && copy[cand].length > 0) {
+          nextid = cand;
+          break;
+        }
+      }
+
+      if (nextid === -1) {
+        alert(
+          `Congratulations! You found all characters! Your final score is ${
+            score + 1
+          }`
+        );
+        setCurrentIndex(0);
+        return copy;
+      } else {
+        setCurrentIndex(() => nextid);
       }
 
       return copy;
