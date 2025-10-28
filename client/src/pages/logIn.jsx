@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { shopContext } from "../App";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import "../styles/login.css";
 
 export default function LoginFunc() {
   const { addUser, token, addToken, addAdmin } = useContext(shopContext);
@@ -68,9 +69,10 @@ export default function LoginFunc() {
 
   return (
     <>
-      <div>
-        <form>
-          <div>
+      <h2 className="heading">Where Is Waldo?</h2>
+      <div className="logInDiv">
+        <form className="logInForm">
+          <div className="divGroup">
             <label htmlFor="username">Username:</label>
             <input
               className="username"
@@ -82,7 +84,7 @@ export default function LoginFunc() {
             ></input>
           </div>
 
-          <div>
+          <div className="divGroup">
             <label htmlFor="password">Password:</label>
             <input
               className="password"
@@ -95,9 +97,13 @@ export default function LoginFunc() {
             ></input>
           </div>
 
-          <div>
-            <button onClick={handleSubmit}>Log In</button>
-            <button onClick={() => navigate("/sign-up")}>Sign Up</button>
+          <div className="btnDiv">
+            <button onClick={handleSubmit} className="btn">
+              Log In
+            </button>
+            <button onClick={() => navigate("/sign-up")} className="btn">
+              Sign Up
+            </button>
           </div>
         </form>
         <h2>{message}</h2>

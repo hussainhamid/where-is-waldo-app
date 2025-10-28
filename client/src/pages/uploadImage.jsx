@@ -68,6 +68,7 @@ export default function UploadImage() {
             onChange={(e) => setFile(e.target.files[0])}
           />
           <button type="submit">Upload</button>
+          <button onClick={() => navigate("/homepage")}>Go back</button>
         </form>
       </div>
     </>

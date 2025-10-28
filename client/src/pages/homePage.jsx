@@ -13,6 +13,7 @@ export default function Homepage() {
   const [score, setScore] = useState(0);
   const [images, setImages] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [gameOver, setGameOver] = useState(false);
   const imgRef = useRef(null);
 
   const userHighScore = localStorage.getItem("highScore") || 0;
@@ -65,6 +66,15 @@ export default function Homepage() {
     fetchMe();
     fetchImage();
   }, [addUser, navigate, token]);
+
+  useEffect(() => {
+    if (!Array.isArray(charCoords) || charCoords.length === 0) return;
+
+    const anyLeft = charCoords.some(
+      (arr) => Array.isArray(arr) && arr.length > 0
+    );
+    if (!anyLeft) setGameOver(true);
+  }, [charCoords]);
 
   const handleClick = async (e) => {
     if (!imgRef.current) return;
@@ -140,11 +150,37 @@ export default function Homepage() {
     navigate("/");
   };
 
-  const currentChars = Array.isArray(charCoords[currentIndex])
+  let currentChars = Array.isArray(charCoords[currentIndex])
     ? charCoords[currentIndex]
     : [];
 
-  const nextTargetName = currentChars.length ? currentChars[0].name : "None";
+  let nextTargetName = currentChars.length ? currentChars[0].name : "None";
+
+  const restartFunc = async () => {
+    setScore(0);
+    setCurrentIndex(0);
+    setGameOver(false);
+
+    try {
+      const res = await axios.get("http://localhost:3000/get-image", {
+        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (res.data.success) {
+        setImages(res.data.imageUrl);
+        setCurrentIndex(0);
+        setCharCoords(res.data.imgData);
+        setCharNames(res.data.imgData.map((char) => char.name));
+      }
+    } catch (err) {
+      console.error("error fetching image: ", err);
+    }
+  };
+
+  console.log(images[currentIndex]);
 
   return (
     <>
@@ -172,21 +208,27 @@ export default function Homepage() {
       </nav>
 
       <div className="imgDiv">
-        <h2>find: {nextTargetName}</h2>
-        <img
-          src={images[currentIndex]}
-          alt={`Waldo ${currentIndex}`}
-          onClick={(e) => {
-            handleClick(e);
-          }}
-          ref={imgRef}
-          style={{
-            width: "80%",
-            height: "auto",
-            objectFit: "cover",
-            cursor: "crosshair",
-          }}
-        />
+        {gameOver ? (
+          <button onClick={restartFunc}>Restart</button>
+        ) : (
+          <div className="imageContainer">
+            <h2>find: {nextTargetName}</h2>
+            <img
+              src={images[currentIndex]}
+              alt={`Waldo ${currentIndex}`}
+              onClick={(e) => {
+                handleClick(e);
+              }}
+              ref={imgRef}
+              style={{
+                width: "80%",
+                height: "auto",
+                objectFit: "cover",
+                cursor: "crosshair",
+              }}
+            />
+          </div>
+        )}
       </div>
     </>
   );
