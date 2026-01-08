@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { shopContext } from "../App";
 import { useNavigate } from "react-router-dom";
+import "../styles/login.css";
 
 export default function SignUp() {
   const { addUser, token, addToken, addAdmin } = useContext(shopContext);
@@ -92,9 +93,10 @@ export default function SignUp() {
 
   return (
     <>
-      <div>
-        <form>
-          <div>
+      <h2 className="heading">Where Is Waldo?</h2>
+      <div className="logInDiv">
+        <form className="logInForm">
+          <div className="divGroup">
             <label htmlFor="username">Username:</label>
             <input
               className="username"
@@ -106,7 +108,7 @@ export default function SignUp() {
             ></input>
           </div>
 
-          <div>
+          <div className="divGroup">
             <label htmlFor="password">Password:</label>
             <input
               className="password"
@@ -119,14 +121,28 @@ export default function SignUp() {
             ></input>
           </div>
 
-          <div>
-            <button onClick={handleSubmit}>Sign Up</button>
-            <button onClick={() => navigate("/")}>Log In</button>
-            <button onClick={handleGuest}>Continue as Guest</button>
+          <div className="btnDiv">
+            <button onClick={handleSubmit} className="btn">
+              Sign Up
+            </button>
           </div>
         </form>
-        <h2>{message}</h2>
       </div>
+
+      <p>
+        Already have an account?{" "}
+        <a onClick={() => navigate("/")} className="navigate-link">
+          Log In{" "}
+        </a>
+      </p>
+      <p>
+        Continue as{" "}
+        <a onClick={handleGuest} className="navigate-link">
+          Guest
+        </a>
+      </p>
+
+      <p>{message}</p>
     </>
   );
 }

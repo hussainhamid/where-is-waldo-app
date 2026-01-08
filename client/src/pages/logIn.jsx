@@ -69,44 +69,50 @@ export default function LoginFunc() {
 
   return (
     <>
-      <h2 className="heading">Where Is Waldo?</h2>
-      <div className="logInDiv">
-        <form className="logInForm">
-          <div className="divGroup">
-            <label htmlFor="username">Username:</label>
-            <input
-              className="username"
-              id="username"
-              value={userData.userName}
-              onChange={(e) =>
-                setUserData({ ...userData, userName: e.target.value })
-              }
-            ></input>
-          </div>
+      <div className="bodyDiv">
+        <h2 className="heading">Where Is Waldo?</h2>
+        <div className="logInDiv">
+          <form className="logInForm">
+            <div className="divGroup">
+              <label htmlFor="username">Username:</label>
+              <input
+                className="username"
+                id="username"
+                value={userData.userName}
+                onChange={(e) =>
+                  setUserData({ ...userData, userName: e.target.value })
+                }
+              ></input>
+            </div>
 
-          <div className="divGroup">
-            <label htmlFor="password">Password:</label>
-            <input
-              className="password"
-              id="password"
-              type="password"
-              value={userData.password}
-              onChange={(e) =>
-                setUserData({ ...userData, password: e.target.value })
-              }
-            ></input>
-          </div>
+            <div className="divGroup">
+              <label htmlFor="password">Password:</label>
+              <input
+                className="password"
+                id="password"
+                type="password"
+                value={userData.password}
+                onChange={(e) =>
+                  setUserData({ ...userData, password: e.target.value })
+                }
+              ></input>
+            </div>
 
-          <div className="btnDiv">
-            <button onClick={handleSubmit} className="btn">
-              Log In
-            </button>
-            <button onClick={() => navigate("/sign-up")} className="btn">
-              Sign Up
-            </button>
-          </div>
-        </form>
-        <h2>{message}</h2>
+            <div className="btnDiv">
+              <button onClick={handleSubmit} className="btn">
+                Log In
+              </button>
+            </div>
+          </form>
+        </div>
+        <p>
+          Don't have an account?{" "}
+          <a onClick={() => navigate("/sign-up")} className="navigate-link">
+            Create one
+          </a>
+        </p>
+
+        <p>{message}</p>
       </div>
     </>
   );

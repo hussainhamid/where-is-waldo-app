@@ -76,12 +76,12 @@ export default function AdminPage() {
       <button onClick={() => navigate("/uploads")}>Upload Image</button>
       <button onClick={() => navigate("/")}>Go back</button>
 
-      <div>
+      <div className="main-div">
         <h3>Uploaded Images</h3>
 
         {image && image.length > 0 ? (
           image.map((imgUrl, index) => (
-            <div key={index}>
+            <div key={index} className="img-div">
               <img
                 src={imgUrl}
                 style={{
@@ -90,14 +90,16 @@ export default function AdminPage() {
                   objectFit: "contain",
                 }}
               />
-              <button onClick={() => deleteImage(imgUrl)}>Delete</button>
-              <button
-                onClick={() =>
-                  navigate(`/set-coords/${encodeURIComponent(imgUrl)}`)
-                }
-              >
-                set coords
-              </button>
+              <div className="img-btn-div">
+                <button onClick={() => deleteImage(imgUrl)}>Delete</button>
+                <button
+                  onClick={() =>
+                    navigate(`/set-coords/${encodeURIComponent(imgUrl)}`)
+                  }
+                >
+                  set coords
+                </button>
+              </div>
             </div>
           ))
         ) : (

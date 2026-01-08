@@ -55,8 +55,6 @@ export default function Homepage() {
           const flatChars = res.data.imgData;
           setCharCoords(flatChars);
           setCharNames(flatChars.map((char) => char.name));
-
-          console.log(res.data.imgData);
         }
       } catch (err) {
         console.error("error fetching image: ", err);
@@ -180,55 +178,56 @@ export default function Homepage() {
     }
   };
 
-  console.log(images[currentIndex]);
-
   return (
     <>
-      {user === "guest" ? (
-        <div>
-          <p>you are playing as guest</p>
-        </div>
-      ) : null}
-      <nav className="navBar">
-        <div className="scoreDiv">
-          <h3>score: {score}</h3>
-        </div>
-        <div>
-          <h3>high score: {userHighScore}</h3>
-        </div>
-
-        {admin ? (
-          <button onClick={() => navigate("/admin")} className="btns">
-            Admin Page
-          </button>
-        ) : null}
-        <button onClick={logOutFunc} className="btns">
-          Logout
-        </button>
-      </nav>
-
-      <div className="imgDiv">
-        {gameOver ? (
-          <button onClick={restartFunc}>Restart</button>
-        ) : (
-          <div className="imageContainer">
-            <h2>find: {nextTargetName}</h2>
-            <img
-              src={images[currentIndex]}
-              alt={`Waldo ${currentIndex}`}
-              onClick={(e) => {
-                handleClick(e);
-              }}
-              ref={imgRef}
-              style={{
-                width: "80%",
-                height: "auto",
-                objectFit: "cover",
-                cursor: "crosshair",
-              }}
-            />
+      <div className="rootDiv">
+        <nav className="navBar">
+          <div className="scoreDiv">
+            <h3>score: {score}</h3>
           </div>
-        )}
+          <div>
+            <h3>high score: {userHighScore}</h3>
+          </div>
+
+          {admin ? (
+            <button onClick={() => navigate("/admin")} className="btns">
+              Admin Page
+            </button>
+          ) : null}
+          <button onClick={logOutFunc} className="btns">
+            Logout
+          </button>
+        </nav>
+
+        {user === "guest" ? (
+          <div>
+            <p>you are playing as guest</p>
+          </div>
+        ) : null}
+
+        <div className="imgDiv">
+          {gameOver ? (
+            <button onClick={restartFunc}>Restart</button>
+          ) : (
+            <div className="imageContainer">
+              <h2>find: {nextTargetName}</h2>
+              <img
+                src={images[currentIndex]}
+                alt={`Waldo ${currentIndex}`}
+                onClick={(e) => {
+                  handleClick(e);
+                }}
+                ref={imgRef}
+                style={{
+                  width: "100%",
+                  height: "auto",
+                  objectFit: "cover",
+                  cursor: "crosshair",
+                }}
+              />
+            </div>
+          )}
+        </div>
       </div>
     </>
   );

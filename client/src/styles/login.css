@@ -1,3 +1,6 @@
+.bodyDiv {
+}
+
 .heading {
   font-family: "Garamond", serif;
   font-size: 30px;
@@ -11,11 +14,11 @@
   border-radius: 20px;
   gap: 30px;
   width: 270px;
-  padding: 20px;
+  padding-bottom: 50px;
   display: flex;
   margin: auto;
   flex-direction: column;
-  padding-top: 60px;
+  padding-top: 50px;
 }
 
 .logInForm {
@@ -54,4 +57,8 @@ input {
   &:focus {
     outline: none;
   }
+}
+
+.navigate-link {
+  cursor: pointer;
 }
